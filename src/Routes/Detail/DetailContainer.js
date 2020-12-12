@@ -47,7 +47,7 @@ export default class extends React.Component{
     } catch {
       this.setState({ error: "Something went wrong."});
     } finally {
-      const result = response.data;
+      const result = response ? response.data : null;
       this.setState({ loading: false, result });
     }
   }
