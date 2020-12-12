@@ -1,6 +1,7 @@
 import React from "react";
 import HomePresenter from "./HomePresenter";
 import { movieApi } from "api";
+import axios from "axios";
 
 export default class extends React.Component{
   state = {
@@ -24,7 +25,7 @@ export default class extends React.Component{
       });
     } catch {
       this.setState({
-        error: "Can't find movies information."
+        error: "Can't find movie information."
       });
     } finally {
       this.setState({
