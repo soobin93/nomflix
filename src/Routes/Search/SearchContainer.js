@@ -11,12 +11,19 @@ export default class extends React.Component{
     error: null
   };
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
+
     const { searchInput } = this.state;
 
     if (searchInput !== "") {
       this.search(searchInput);
     }
+  };
+
+  updateSearchInput = (event) => {
+    const { target: { value } } = event;
+    this.setState({ searchInput: value });
   };
 
   search = async (input) => {
@@ -37,12 +44,13 @@ export default class extends React.Component{
     const { movieResults, tvResults, searchInput, loading, error } = this.state;
 
     return <SearchPresenter
-      movieResutls={movieResults}
-      tvResutls={tvResults}
+      movieResults={movieResults}
+      tvResults={tvResults}
       searchInput={searchInput}
       loading={loading}
       error={error}
       handleSubmit={this.handleSubmit}
+      updateSearchInput={this.updateSearchInput}
     />;
   }
 }

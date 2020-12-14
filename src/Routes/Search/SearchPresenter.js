@@ -2,11 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-const Container = styled.div``;
+import Loader from "Components/Loader";
+import Section from "Components/Section";
 
-const Form = styled.form``;
+const Container = styled.div`
+  padding: 40px 20px;
+`;
 
-const Input = styled.input``;
+const Form = styled.form`
+  margin-bottom: 50px;
+  width: 100%;
+`;
+
+const Input = styled.input`
+  all: unset;
+  font-size: 28px;
+  width: 100%;
+  
+`;
 
 const SearchPresenter = ({
   movieResults,
@@ -14,12 +27,29 @@ const SearchPresenter = ({
   loading,
   searchInput,
   handleSubmit,
+  updateSearchInput,
   error
 }) => (
   <Container>
     <Form onSubmit={handleSubmit}>
-
+      <Input placeholder="Search Movies or TV Shows..." value={searchInput} onChange={updateSearchInput}/>
     </Form>
+    {loading ? <Loader/> : <>
+      {movieResults && movieResults.length > 0 && (
+        <Section title="Movie Results">
+          {movieResults.map(movie => (
+            <span key={movie.id}>{movie.title}</span>
+          ))}
+        </Section>
+      )}
+      {tvResults && tvResults.length > 0 && (
+        <Section title="TV Results">
+          {tvResults.map(show => (
+            <span key={show.id}>{show.name}</span>
+          ))}
+        </Section>
+      )}
+    </>}
   </Container>
 );
 
@@ -29,7 +59,8 @@ SearchPresenter.propTypes = {
   searchInput:PropTypes.string,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  updateSearchInput: PropTypes.func.isRequired
 };
 
 export default SearchPresenter;
