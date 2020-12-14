@@ -47,15 +47,28 @@ const Data = styled.div`
   margin-left: 10px;
 `;
 
-const Title = styled.span``;
+const Title = styled.div`
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
 
-const InfoContainer = styled.div``;
+const InfoContainer = styled.div`
+  margin: 20px 0;
+`;
 
 const Info = styled.span``;
 
-const Divider = styled.span``;
+const Divider = styled.span`
+  margin: 0 10px;
+`;
 
-const Overview = styled.p``;
+const Overview = styled.p`
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.5;
+  width: 50%;
+`;
 
 const DetailPresenter = ({ result, loading, error }) =>
   loading ? (
@@ -80,8 +93,26 @@ const DetailPresenter = ({ result, loading, error }) =>
               : result.original_name}
           </Title>
           <InfoContainer>
-            <Info></Info>
+            <Info>
+              {result.release_date
+                ? result.release_date.substring(0, 4)
+                : result.first_air_date.substring(0, 4)}
+            </Info>
+            <Divider>⚬</Divider>
+            <Info>
+              {result.runtime ? result.runtime : result.episode_run_time[0]} min
+            </Info>
+            <Divider>⚬</Divider>
+            <Info>
+              {result.genres &&
+                result.genres.map((genre, index) =>
+                  index === result.genres.length - 1
+                    ? genre.name
+                    : `${genre.name} / `
+                )}
+            </Info>
           </InfoContainer>
+          <Overview>{result.overview}</Overview>
         </Data>
       </Content>
     </Container>
