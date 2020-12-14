@@ -17,8 +17,7 @@ const SearchPresenter = ({
   error
 }) => (
   <Container>
-    <Form onSubmit={handleSubmit
-    }>
+    <Form onSubmit={handleSubmit}>
 
     </Form>
   </Container>
