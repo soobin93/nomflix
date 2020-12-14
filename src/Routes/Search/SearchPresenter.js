@@ -70,7 +70,6 @@ const SearchPresenter = ({
                 year={
                   show.first_air_date && show.first_air_date.substring(0, 4)
                 }
-                isMovie={true}
               />
             ))}
           </Section>
