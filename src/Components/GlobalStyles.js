@@ -11,7 +11,7 @@ const globalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    font-family: Ubuntu sans-serif;
+    font-family: sans-serif;
     font-size: 14px;
     background-color: rgba(20, 20, 20, 1);
     color: white;
