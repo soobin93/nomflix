@@ -9,8 +9,9 @@ const Container = styled.div`
 `;
 
 const Title = styled.span`
-  font-size: 16px;
   font-weight: bold;
+  font-size: 32px;
+  text-transform: uppercase;
 `;
 
 const Grid = styled.div`
@@ -21,18 +22,18 @@ const Grid = styled.div`
 `;
 
 const Section = ({ title, children }) => (
-    <Container>
-        <Title>{title}</Title>
-        <Grid>{children}</Grid>
-    </Container>
+  <Container>
+    <Title>{title}</Title>
+    <Grid>{children}</Grid>
+  </Container>
 );
 
 Section.propTypes = {
-    title: PropTypes.string.isRequired,
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ])
-}
+  title: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+};
 
 export default Section;
