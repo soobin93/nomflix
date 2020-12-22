@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { movieApi, tvApi } from "api";
 import Helmet from "react-helmet";
+import styled from "styled-components";
 
 import Loader from "Components/Loader";
 import Message from "Components/Message";
@@ -72,8 +72,59 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const DetailPresenter = ({ result, loading, error }) =>
-  loading ? (
+export default (props) => {
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isMovie, setIsMovie] = useState(false);
+  const [isTv, setIsTv] = useState(false);
+
+  const loadDetails = async (id) => {
+    let response;
+
+    try {
+      if (isMovie) {
+        response = await movieApi.details(id);
+      } else if (isTv) {
+        response = await tvApi.details(id);
+      } else {
+        setError("Given type is invalid.");
+      }
+    } catch {
+      setError("Something went wrong.");
+    } finally {
+      const result = response ? response.data : null;
+      setResult(result);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const {
+      location: { pathname },
+    } = props;
+
+    if (pathname.includes("/movie/")) {
+      setIsMovie(true);
+    } else if (pathname.includes("/tv/")) {
+      setIsTv(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const {
+      match: {
+        params: { id },
+      },
+    } = props;
+    const parsedId = parseInt(id);
+
+    if (isMovie || isTv) {
+      loadDetails(parsedId);
+    }
+  }, [isMovie, isTv]);
+
+  return loading ? (
     <>
       <Helmet>
         <title>Loading | Nomflix</title>
@@ -133,11 +184,4 @@ const DetailPresenter = ({ result, loading, error }) =>
       </Content>
     </Container>
   );
-
-DetailPresenter.propTypes = {
-  result: PropTypes.object,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
 };
-
-export default DetailPresenter;
