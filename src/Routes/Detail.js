@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { movieApi, tvApi } from "api";
 import Helmet from "react-helmet";
 import styled from "styled-components";
 
 import Loader from "Components/Loader";
 import Message from "Components/Message";
+import Videos from "Components/Videos";
+import Production from "Components/Production";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -44,7 +47,7 @@ const Cover = styled.div`
   border-radius: 5px;
 `;
 
-const Data = styled.div`
+const Details = styled.div`
   width: 70%;
   margin-left: 10px;
 `;
@@ -65,6 +68,42 @@ const Divider = styled.span`
   margin: 0 10px;
 `;
 
+const TabContainer = styled.div`
+  margin-top: 20px;
+`;
+
+const TabLink = styled(Link)`
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+`;
+
+const Tab = styled.button`
+  font-size: 18px;
+  padding: 5px 15px;
+  border: 1px #fff solid;
+  border-radius: 3px;
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
+const ImdbButton = styled.button`
+  background-color: #f5c518;
+  font-weight: bold;
+  border-radius: 3px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 const Overview = styled.p`
   font-size: 12px;
   opacity: 0.7;
@@ -73,7 +112,12 @@ const Overview = styled.p`
 `;
 
 export default (props) => {
+  const IMDB_BASE_URL = "https://www.imdb.com/title/";
+
   const [result, setResult] = useState(null);
+  const [videos, setVideos] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isMovie, setIsMovie] = useState(false);
@@ -85,13 +129,23 @@ export default (props) => {
     try {
       if (isMovie) {
         response = await movieApi.details(id);
+        const {
+          data: { results: loadedVideos },
+        } = await movieApi.videos(id);
+
+        const youtubeVideos = loadedVideos.filter(
+          (video) => video.site === "YouTube"
+        );
+
+        setVideos(youtubeVideos);
       } else if (isTv) {
         response = await tvApi.details(id);
       } else {
         setError("Given type is invalid.");
       }
-    } catch {
+    } catch (error) {
       setError("Something went wrong.");
+      console.log(error);
     } finally {
       const result = response ? response.data : null;
       setResult(result);
@@ -145,6 +199,7 @@ export default (props) => {
       <Backdrop
         bgImage={`https://image.tmdb.org/t/p/original/${result.backdrop_path}`}
       />
+
       <Content>
         <Cover
           bgImage={
@@ -153,7 +208,7 @@ export default (props) => {
               : "/no-poster-available.jpg"
           }
         />
-        <Data>
+        <Details>
           <Title>
             {result.original_title
               ? result.original_title
@@ -178,9 +233,45 @@ export default (props) => {
                     : `${genre.name} / `
                 )}
             </Info>
+            {result.imdb_id && (
+              <>
+                <Divider>⚬</Divider>
+                <Info>
+                  <a target="_blank" href={`${IMDB_BASE_URL}${result.imdb_id}`}>
+                    <ImdbButton>IMDb</ImdbButton>
+                  </a>
+                </Info>
+              </>
+            )}
           </InfoContainer>
           <Overview>{result.overview}</Overview>
-        </Data>
+          <TabContainer>
+            {videos.length > 0 && (
+              <TabLink to={`/${isMovie ? "movie" : "tv"}/${result.id}/videos`}>
+                <Tab>Videos</Tab>
+              </TabLink>
+            )}
+
+            <TabLink
+              to={`/${isMovie ? "movie" : "tv"}/${result.id}/production`}
+            >
+              <Tab>Production</Tab>
+            </TabLink>
+          </TabContainer>
+
+          {videos.length > 0 && (
+            <Route path={`/${isMovie ? "movie" : "tv"}/:id/videos`}>
+              <Videos videos={videos} />
+            </Route>
+          )}
+
+          <Route path={`/${isMovie ? "movie" : "tv"}/:id/production`}>
+            <Production
+              companies={result.production_companies}
+              countries={result.production_countries}
+            />
+          </Route>
+        </Details>
       </Content>
     </Container>
   );
