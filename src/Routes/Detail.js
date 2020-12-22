@@ -9,6 +9,7 @@ import Message from "Components/Message";
 import Videos from "Components/Videos";
 import Production from "Components/Production";
 import Seasons from "Components/Seasons";
+import Collection from "Components/Collection";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -258,6 +259,12 @@ export default (props) => {
               <Tab>Production</Tab>
             </TabLink>
 
+            {isMovie && result.belongs_to_collection && (
+              <TabLink to={`/movie/${result.id}/collection`}>
+                <Tab>Collection</Tab>
+              </TabLink>
+            )}
+
             {isTv && result.seasons.length > 0 && (
               <TabLink to={`/tv/${result.id}/seasons`}>
                 <Tab>Seasons</Tab>
@@ -277,6 +284,12 @@ export default (props) => {
               countries={result.production_countries}
             />
           </Route>
+
+          {isMovie && result.belongs_to_collection && (
+            <Route path={`/movie/:id/collection`}>
+              <Collection collection={result.belongs_to_collection} />
+            </Route>
+          )}
 
           {isTv && result.seasons.length > 0 && (
             <Route path={`/tv/:id/seasons`}>

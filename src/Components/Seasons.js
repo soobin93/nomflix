@@ -70,6 +70,16 @@ const Seasons = ({ seasons }) => (
   </Container>
 );
 
-Seasons.propTypes = {};
+Seasons.propTypes = {
+  seasons: PropTypes.arrayOf(
+    PropTypes.shape({
+      poster_path: PropTypes.string,
+      name: PropTypes.string.isRequired,
+      air_date: PropTypes.string,
+      episode_count: PropTypes.number,
+      overview: PropTypes.string,
+    })
+  ),
+};
 
 export default Seasons;
