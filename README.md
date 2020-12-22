@@ -1,6 +1,6 @@
 # Nomflix
 
-Building Movies Library App by React...<br>
+Building Movies DB Viewer Application by using Reactjs...<br>
 Powered by [The Movie Database API](https://www.themoviedb.org/)
 
 ## Live Demo
