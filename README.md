@@ -9,6 +9,6 @@ Powered by [The Movie Database API](https://www.themoviedb.org/)
 
 ## Screenshots
 
-![Screenshot 1](screenshots/Nomflix1.png)
-![Screenshot 2](screenshots/Nomflix2.png)
+![Screenshot 1](screenshots/Nomflix1.png)<br><br>
+![Screenshot 2](screenshots/Nomflix2.png)<br><br>
 ![Screenshot 3](screenshots/Nomflix3.png)
