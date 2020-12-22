@@ -8,6 +8,7 @@ import Loader from "Components/Loader";
 import Message from "Components/Message";
 import Videos from "Components/Videos";
 import Production from "Components/Production";
+import Seasons from "Components/Seasons";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -116,8 +117,6 @@ export default (props) => {
 
   const [result, setResult] = useState(null);
   const [videos, setVideos] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isMovie, setIsMovie] = useState(false);
@@ -171,6 +170,7 @@ export default (props) => {
         params: { id },
       },
     } = props;
+
     const parsedId = parseInt(id);
 
     if (isMovie || isTv) {
@@ -257,6 +257,12 @@ export default (props) => {
             >
               <Tab>Production</Tab>
             </TabLink>
+
+            {isTv && result.seasons.length > 0 && (
+              <TabLink to={`/tv/${result.id}/seasons`}>
+                <Tab>Seasons</Tab>
+              </TabLink>
+            )}
           </TabContainer>
 
           {videos.length > 0 && (
@@ -271,6 +277,12 @@ export default (props) => {
               countries={result.production_countries}
             />
           </Route>
+
+          {isTv && result.seasons.length > 0 && (
+            <Route path={`/tv/:id/seasons`}>
+              <Seasons seasons={result.seasons} />
+            </Route>
+          )}
         </Details>
       </Content>
     </Container>

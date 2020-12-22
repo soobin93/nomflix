@@ -63,7 +63,7 @@ const Production = ({ companies, countries }) => (
   <Container>
     {companies.length > 0 && (
       <>
-        <Header>Companies</Header>
+        <Header>Production Companies</Header>
         <CompanyContainer>
           {companies.map((company) => (
             <Company key={company.id}>
@@ -83,7 +83,7 @@ const Production = ({ companies, countries }) => (
 
     {countries.length > 0 && (
       <>
-        <Header>Countries</Header>
+        <Header>Production Countries</Header>
         <Divider />
         <CountryContainer>
           {countries.map((country) => (
